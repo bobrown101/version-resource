@@ -39,6 +39,9 @@ copyContents(sourcePath, outPath, `could not copy resource ${sourcePath}`);
 
 console.log(
   `${emoji.get(
+
+
+    
     "factory"
   )}    Successfully versioned the resource ${sourcePath} at ${outPath}`
 );

@@ -1,0 +1,19 @@
+name: Semantic Release
+on: push
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
+      with:
+        node-version: 13.5
+    - name: Install dependencies
+      run: npm install
+    - name: Build
+      run: npm run build
+    - name: Release to NPM
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: npx semantic-release

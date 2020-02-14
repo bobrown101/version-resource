@@ -10,18 +10,71 @@
     "commander": "^4.1.1",
     "shelljs": "^0.8.3",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@types/node-emoji": "^1.8.1",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.1.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7",
+    "node-emoji": "^1.10.0",
+    "prettier": "^1.19.1",
+    "semantic-release": "^17.0.3"
   },
   "scripts": {
     "start": "ts-node index.ts",
     "build": "tsc index.ts --outDir bin"
   },
-  "dependencies": {
-    "@types/node-emoji": "^1.8.1",
-    "husky": "^4.2.3",
-    "node-emoji": "^1.10.0"
-  },
   "bin": {
     "version-resource": "./bin/index.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E  HUSKY_GIT_PARAMS"
+    }
+  },
+  "release": {
+    "branches": [
+      "master",
+      {
+        "name": "next",
+        "prerelease": true
+      }
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "subject-case": [
+        2,
+        "never",
+        [
+          "start-case",
+          "pascal-case"
+        ]
+      ]
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   }
 }
