@@ -1,8 +1,8 @@
 import * as path from "path";
-import { mkdir, rm, cp } from "shelljs";
+import { mkdir, rm, cp, exec } from "shelljs";
 import * as emoji from "node-emoji";
 import { execInFolder } from "./exec";
-import { logError } from "./log";
+import { logError, logWarn } from "./log";
 
 export const folderExistsAtPath = (path: string) => {
   const result = execInFolder(path, "ls -al");
@@ -29,10 +29,32 @@ export const createOutDirPath = (
   return path.join(rootPath, outDir, gitBranch, gitHash);
 };
 
-export const copyContents = (from: string, to: string, errorMsg?: string) => {
-  const result = cp("-r", from, to);
+export const copyContents = (
+  from: string,
+  to: string,
+  outFoldername: string,
+  errorMsg?: string
+) => {
+  // use rsync instead of cp for --exclude functionaltiy
+  // we need to exclude the outFoldername because if we do not
+  // it will recursivly copy the out folder in an endless loop
+  if (folderExistsAtPath(path.join(from, outFoldername))) {
+    logWarn(
+      `found output directory "${outFoldername}" in source directory "${from}". Skipping copying this as it will cause an infinite loop.`
+    );
+  }
+
+  const result = exec(
+    `rsync -a --progress ${from} ${to} --exclude ${outFoldername}`,
+    {
+      silent: true
+    }
+  );
+
   if (result.stderr) {
-    logError(errorMsg || `versioned-resources could not find anything at ${from}`);
+    logError(
+      errorMsg || `versioned-resources could not find anything at ${from}`
+    );
     process.exit(1);
   }
 };

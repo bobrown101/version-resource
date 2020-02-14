@@ -25,7 +25,7 @@ if (!rootExists) {
   process.exit(1);
 }
 
-const gitInfo = getGitInfo(program.out);
+const gitInfo = getGitInfo(program.root);
 const sourcePath = createSourceDirPath(program.root, program.source);
 const outPath = createOutDirPath(
   program.root,
@@ -35,13 +35,15 @@ const outPath = createOutDirPath(
 );
 
 makeFolderAtPath(outPath);
-copyContents(sourcePath, outPath, `could not copy resource ${sourcePath}`);
+copyContents(
+  sourcePath,
+  outPath,
+  program.out,
+  `could not copy resource ${sourcePath}`
+);
 
 console.log(
   `${emoji.get(
-
-
-    
     "factory"
   )}    Successfully versioned the resource ${sourcePath} at ${outPath}`
 );
