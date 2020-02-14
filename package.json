@@ -17,9 +17,7 @@
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "husky": "^4.2.3",
-    "lint-staged": "^10.0.7",
     "node-emoji": "^1.10.0",
-    "prettier": "^1.19.1",
     "semantic-release": "^17.0.3"
   },
   "scripts": {
@@ -31,7 +29,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
       "commit-msg": "commitlint -E  HUSKY_GIT_PARAMS"
     }
@@ -60,17 +57,8 @@
       ]
     }
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "publishConfig": {
     "access": "public"
-  },
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write"
-    ]
   },
   "config": {
     "commitizen": {
