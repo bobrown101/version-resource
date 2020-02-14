@@ -13,6 +13,15 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "ts-node index.ts",
+    "build": "tsc index.ts --outDir bin"
+  },
+  "dependencies": {
+    "@types/node-emoji": "^1.8.1",
+    "husky": "^4.2.3",
+    "node-emoji": "^1.10.0"
+  },
+  "bin": {
+    "version-resource": "./bin/index.js"
   }
 }
