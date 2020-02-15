@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-import * as program from "commander";
-import * as emoji from "node-emoji";
+import program from "commander";
 import { getGitInfo } from "./utils/git";
 import {
   createOutDirPath,

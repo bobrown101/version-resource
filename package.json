@@ -1,28 +1,29 @@
 {
   "name": "version-resource",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "author": "Brady Brown <bobrown101@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^13.7.1",
-    "@types/shelljs": "^0.8.6",
-    "commander": "^4.1.1",
-    "shelljs": "^0.8.3",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.5",
+  "dependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@types/node": "^13.7.1",
     "@types/node-emoji": "^1.8.1",
+    "@types/shelljs": "^0.8.6",
+    "@zeit/ncc": "^0.21.1",
+    "commander": "^4.1.1",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "husky": "^4.2.3",
     "node-emoji": "^1.10.0",
-    "semantic-release": "^17.0.3"
+    "semantic-release": "^17.0.3",
+    "shelljs": "^0.8.3",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
   },
   "scripts": {
     "start": "ts-node index.ts",
-    "build": "tsc index.ts --outDir bin"
+    "build": "ncc build -o bin"
   },
   "bin": {
     "version-resource": "./bin/index.js"
