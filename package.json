@@ -65,5 +65,9 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@types/fs-extra": "^8.0.1",
+    "node-fs-extra": "^0.8.2"
   }
 }

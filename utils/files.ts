@@ -1,20 +1,26 @@
-import shelljs from "shelljs";
-import path from "path"
+import path from "path";
 import { execInFolder } from "./exec";
-import { logError, logWarn } from "./log";
-const { mkdir, rm, cp, exec } = shelljs
+import { logError, logInfo } from "./log";
+import { execSync } from "child_process";
+import { copySync } from "fs-extra";
 
 export const folderExistsAtPath = (path: string) => {
-  const result = execInFolder(path, "ls -al");
-  return result.code === 0;
+  try {
+    const result = execInFolder(path, "ls -al");
+    return !result.includes("No such file or directory");
+  } catch (error) {
+    return false;
+  }
 };
 export const removeFolderAtPath = (path: string) => {
-    rm("-rf", path)
-}
+  execSync(`rm -rf ${path}`);
+};
 export const makeFolderAtPath = (path: string, errorMsg?: string) => {
-  const result = mkdir("-p", path);
-  if (result.code !== 0) {
+  try {
+    execSync(`mkdir -p ${path}`);
+  } catch (error) {
     logError(errorMsg || ` could not create folder at ${path}`);
+    process.exit(1);
   }
 };
 export const createSourceDirPath = (rootPath: string, sourceDir: string) => {
@@ -29,32 +35,13 @@ export const createOutDirPath = (
   return path.join(rootPath, outDir, gitBranch, gitHash);
 };
 
-export const copyContents = (
-  from: string,
-  to: string,
-  outFoldername: string,
-  errorMsg?: string
-) => {
-  // use rsync instead of cp for --exclude functionaltiy
-  // we need to exclude the outFoldername because if we do not
-  // it will recursivly copy the out folder in an endless loop
-  if (folderExistsAtPath(path.join(from, outFoldername))) {
-    logWarn(
-      `found output directory "${outFoldername}" in source directory "${from}". Skipping copying this as it will cause an infinite loop.`
-    );
-  }
-
-  const result = exec(
-    `rsync -a --progress ${from} ${to} --exclude ${outFoldername}`,
-    {
-      silent: true
-    }
-  );
-
-  if (result.stderr) {
-    logError(
-      errorMsg || `versioned-resources could not find anything at ${from}`
-    );
+export const copyContents = (from: string, to: string, errorMsg?: string) => {
+  logInfo(`copying ${from} to ${to}`);
+  try {
+    copySync(from, path.join(to, from));
+  } catch (error) {
+    logError(error);
+    errorMsg && logError(errorMsg);
     process.exit(1);
   }
 };

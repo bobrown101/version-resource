@@ -1,5 +1,9 @@
 import emoji from "node-emoji";
 
+export const logInfo = (msg: string) => {
+  console.info(`${emoji.get("bar_chart")} ${msg}`);
+};
+
 export const logWarn = (msg: string) => {
   console.info(`${emoji.get("cop")} ${msg}`);
 };

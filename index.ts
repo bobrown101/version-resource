@@ -4,7 +4,6 @@ import program from "commander";
 import { getGitInfo } from "./utils/git";
 import {
   createOutDirPath,
-  makeFolderAtPath,
   createSourceDirPath,
   copyContents,
   folderExistsAtPath,
@@ -34,20 +33,13 @@ const versionResourceWithTag = (tag: string) => {
     gitInfo.branch,
     tag
   );
-  removeFolderAtPath(outPath)
-  makeFolderAtPath(outPath);
-  copyContents(
-    sourcePath,
-    outPath,
-    program.out,
-    `could not copy resource ${sourcePath}`
+  removeFolderAtPath(outPath);
+  copyContents(sourcePath, outPath, `could not copy resource ${sourcePath}`);
+
+  logFinished(
+    `successfully versioned the resource ${sourcePath} at ${outPath}`
   );
-  
-  logFinished(`successfully versioned the resource ${sourcePath} at ${outPath}`)
-}
+};
 
-versionResourceWithTag(gitInfo.hash)
-versionResourceWithTag("latest")
-
-
-
+versionResourceWithTag(gitInfo.hash);
+versionResourceWithTag("latest");

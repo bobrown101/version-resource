@@ -1,0 +1,107 @@
+Arguments: 
+  /home/brady/.nvm/versions/node/v13.5.0/bin/node /home/brady/.nvm/versions/node/v13.5.0/bin/yarn add @types/node-fs-extra
+
+PATH: 
+  /home/brady/.nvm/versions/node/v13.5.0/bin:/home/brady/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.21.1
+
+Node version: 
+  13.5.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types%2fnode-fs-extra: Not found
+      at Request.params.callback [as _callback] (/home/brady/.nvm/versions/node/v13.5.0/lib/node_modules/yarn/lib/cli.js:66947:18)
+      at Request.self.callback (/home/brady/.nvm/versions/node/v13.5.0/lib/node_modules/yarn/lib/cli.js:140665:22)
+      at Request.emit (events.js:305:20)
+      at Request.<anonymous> (/home/brady/.nvm/versions/node/v13.5.0/lib/node_modules/yarn/lib/cli.js:141637:10)
+      at Request.emit (events.js:305:20)
+      at IncomingMessage.<anonymous> (/home/brady/.nvm/versions/node/v13.5.0/lib/node_modules/yarn/lib/cli.js:141559:12)
+      at Object.onceWrapper (events.js:411:28)
+      at IncomingMessage.emit (events.js:317:22)
+      at endReadableNT (_stream_readable.js:1215:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "version-resource",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "author": "Brady Brown <bobrown101@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+      "@commitlint/cli": "^8.3.5",
+      "@commitlint/config-conventional": "^8.3.4",
+      "@types/node": "^13.7.1",
+      "@types/node-emoji": "^1.8.1",
+      "@types/shelljs": "^0.8.6",
+      "@zeit/ncc": "^0.21.1",
+      "commander": "^4.1.1",
+      "commitizen": "^4.0.3",
+      "cz-conventional-changelog": "^3.1.0",
+      "husky": "^4.2.3",
+      "node-emoji": "^1.10.0",
+      "semantic-release": "^17.0.3",
+      "shelljs": "^0.8.3",
+      "ts-node": "^8.6.2",
+      "typescript": "^3.7.5"
+    },
+    "scripts": {
+      "start": "ts-node index.ts",
+      "build": "ncc build -o bin"
+    },
+    "bin": {
+      "version-resource": "./bin/index.js"
+    },
+    "husky": {
+      "hooks": {
+        "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+        "commit-msg": "commitlint -E  HUSKY_GIT_PARAMS"
+      }
+    },
+    "release": {
+      "branches": [
+        "master",
+        {
+          "name": "next",
+          "prerelease": true
+        }
+      ]
+    },
+    "commitlint": {
+      "extends": [
+        "@commitlint/config-conventional"
+      ],
+      "rules": {
+        "subject-case": [
+          2,
+          "never",
+          [
+            "start-case",
+            "pascal-case"
+          ]
+        ]
+      }
+    },
+    "publishConfig": {
+      "access": "public"
+    },
+    "config": {
+      "commitizen": {
+        "path": "node_modules/cz-conventional-changelog"
+      }
+    },
+    "dependencies": {
+      "node-fs-extra": "^0.8.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

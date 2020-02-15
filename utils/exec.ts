@@ -1,17 +1,17 @@
-import shelljs from "shelljs"
+import { execSync } from "child_process";
 
-const exec = shelljs.exec
 export const execInFolder = (folder: string, command: string) => {
-    return exec(`cd ${folder} && ${command}`, {
-        silent: true
-    })
-}
+  return execSync(`cd ${folder} && ${command}`).toString();
+};
 
-export const ensureOutput = (execResponse: shelljs.ShellString, errorString = "Command did not succeed") => {
-    const out = execResponse.stdout.trim()
-    if(out === ""){
-        console.error(errorString)
-        process.exit(1)
-    }
-    return out
-}
+export const ensureOutput = (
+  response: string,
+  errorString = "Command did not succeed"
+) => {
+  const out = response.trim();
+  if (out === "") {
+    console.error(errorString);
+    process.exit(1);
+  }
+  return out;
+};
