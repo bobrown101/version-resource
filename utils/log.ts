@@ -1,4 +1,4 @@
-import * as emoji from "node-emoji";
+import emoji from "node-emoji";
 
 export const logWarn = (msg: string) => {
   console.info(`${emoji.get("cop")} ${msg}`);

@@ -1,8 +1,8 @@
-import * as path from "path";
-import { mkdir, rm, cp, exec } from "shelljs";
-import * as emoji from "node-emoji";
+import shelljs from "shelljs";
+import path from "path"
 import { execInFolder } from "./exec";
 import { logError, logWarn } from "./log";
+const { mkdir, rm, cp, exec } = shelljs
 
 export const folderExistsAtPath = (path: string) => {
   const result = execInFolder(path, "ls -al");
