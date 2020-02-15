@@ -8,9 +8,9 @@ export const folderExistsAtPath = (path: string) => {
   const result = execInFolder(path, "ls -al");
   return result.code === 0;
 };
-// export const removeFolderAtPath = (path: string) => {
-//     rm("-rf", path)
-// }
+export const removeFolderAtPath = (path: string) => {
+    rm("-rf", path)
+}
 export const makeFolderAtPath = (path: string, errorMsg?: string) => {
   const result = mkdir("-p", path);
   if (result.code !== 0) {

@@ -8,9 +8,10 @@ import {
   makeFolderAtPath,
   createSourceDirPath,
   copyContents,
-  folderExistsAtPath
+  folderExistsAtPath,
+  removeFolderAtPath
 } from "./utils/files";
-import { logError } from "./utils/log";
+import { logError, logFinished } from "./utils/log";
 
 program
   .requiredOption("-r, --root <type>", "path of git repository")
@@ -24,26 +25,30 @@ if (!rootExists) {
   logError(`root folder ${program.root} does not exist`);
   process.exit(1);
 }
-
 const gitInfo = getGitInfo(program.root);
 const sourcePath = createSourceDirPath(program.root, program.source);
-const outPath = createOutDirPath(
-  program.root,
-  program.out,
-  gitInfo.branch,
-  gitInfo.hash
-);
 
-makeFolderAtPath(outPath);
-copyContents(
-  sourcePath,
-  outPath,
-  program.out,
-  `could not copy resource ${sourcePath}`
-);
+const versionResourceWithTag = (tag: string) => {
+  const outPath = createOutDirPath(
+    program.root,
+    program.out,
+    gitInfo.branch,
+    tag
+  );
+  removeFolderAtPath(outPath)
+  makeFolderAtPath(outPath);
+  copyContents(
+    sourcePath,
+    outPath,
+    program.out,
+    `could not copy resource ${sourcePath}`
+  );
+  
+  logFinished(`successfully versioned the resource ${sourcePath} at ${outPath}`)
+}
 
-console.log(
-  `${emoji.get(
-    "factory"
-  )}    Successfully versioned the resource ${sourcePath} at ${outPath}`
-);
+versionResourceWithTag(gitInfo.hash)
+versionResourceWithTag("latest")
+
+
+
