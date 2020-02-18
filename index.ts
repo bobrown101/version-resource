@@ -9,8 +9,10 @@ import {
   folderExistsAtPath,
   removeFolderAtPath
 } from "./utils/files";
-import { logError, logFinished } from "./utils/log";
+import { logError, logFinished, logInfo } from "./utils/log";
 import { pilot } from "./utils/pilot";
+import { addToHistory, getHistory } from "./utils/dotfile";
+import path from "path";
 
 program
   .requiredOption("-r, --root <type>", "path of git repository")
@@ -31,6 +33,8 @@ if (!rootExists) {
 const gitInfo = getGitInfo(program.root);
 const sourcePath = createSourceDirPath(program.root, program.source);
 
+
+
 const versionResourceWithTag = (tag: string) => {
   const outPath = createOutDirPath(
     program.root,
@@ -41,6 +45,8 @@ const versionResourceWithTag = (tag: string) => {
   removeFolderAtPath(outPath);
   copyContents(sourcePath, outPath, `could not copy resource ${sourcePath}`);
 
+  addToHistory(path.join(program.root, program.out), gitInfo.branch, tag)
+
   logFinished(
     `successfully versioned the resource ${sourcePath} at ${outPath}`
   );
@@ -50,5 +56,7 @@ versionResourceWithTag(gitInfo.hash);
 versionResourceWithTag("latest");
 
 if (program.pilot) {
-  pilot("Versioned Resources", program.out)
+  logInfo("Generating pilot file")
+  const versionResourceHistory = getHistory(path.join(program.root, program.out))
+  pilot(program.out, versionResourceHistory);
 }
