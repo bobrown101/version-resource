@@ -5,24 +5,24 @@ import { logInfo } from "./log";
 const DOTFILE_NAME = ".version-resource-history";
 export const addToHistory = (
   outlocation: string,
-  branch: string,
-  hash: string
+  versionName: string,
+  versionTag: string
 ) => {
   const history = getHistory(outlocation);
   const newRecord = {
-    branch,
-    commit: hash
+    versionName,
+    versionTag
   };
   const newHistory = Array.from(new Set([...history, newRecord]))
-    .map(record => `${record.branch},${record.commit}`)
+    .map(record => `${record.versionName},${record.versionTag}`)
     .join("\n");
   writeFileSync(path.join(outlocation, DOTFILE_NAME), newHistory);
-  logInfo(`Added record of "${branch},${hash}" to ${DOTFILE_NAME}`)
+  logInfo(`Added record of "${versionName},${versionTag}" to ${DOTFILE_NAME}`)
 };
 
 export type versionHistory = {
-  branch: string;
-  commit: string;
+  versionName: string;
+  versionTag: string;
 }[];
 export const getHistory = (outlocation: string): versionHistory => {
   try {
@@ -30,10 +30,10 @@ export const getHistory = (outlocation: string): versionHistory => {
       .toString()
       .trim();
     return raw.split("\n").map(line => {
-      const [branch, commit] = line.split(",");
+      const [versionName, versionTag] = line.split(",");
       return {
-        branch,
-        commit
+        versionName,
+        versionTag
       };
     });
   } catch (error) {

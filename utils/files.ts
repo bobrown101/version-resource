@@ -29,10 +29,10 @@ export const createSourceDirPath = (rootPath: string, sourceDir: string) => {
 export const createOutDirPath = (
   rootPath: string,
   outDir: string,
-  gitBranch: string,
-  gitHash: string
+  versionName: string,
+  versionTag: string
 ) => {
-  return path.join(rootPath, outDir, gitBranch, gitHash);
+  return path.join(rootPath, outDir, versionName, versionTag);
 };
 
 export const copyContents = (from: string, to: string, errorMsg?: string) => {

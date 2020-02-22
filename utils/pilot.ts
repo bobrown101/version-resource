@@ -2,59 +2,11 @@ import { writeFileSync, readdirSync } from "fs-extra";
 import path from "path";
 import { versionHistory } from "./dotfile";
 
-// interface dirTree {
-//   [key: string]: any;
-// }
 const getFilesInDir = (path: string) =>
   readdirSync(path, { withFileTypes: true }).map(directory => directory.name);
 
-// const directoryTree = (dirpath: string, level = 1) => {
-//   if(level > 1){
-//     return {}
-//   }
-//   const dirs = getDirectories(dirpath);
-//   const result: dirTree = {};
-//   dirs.forEach(dir => {
-//     result[dir] = directoryTree(path.join(dirpath, dir));
-//   });
-//   return result;
-// };
-
-// const linksFromDirTree = (dirTree: dirTree, currentPath: string): string => {
-//   const level = currentPath.split("/").length;
-//   const children = Object.keys(dirTree);
-
-//   const generateHeading = (
-//     level: number,
-//     currentPath: string,
-//     isLink: boolean
-//   ) => {
-//     const folderName = currentPath.split("/").reverse()[0];
-//     if (folderName === "") {
-//       return "";
-//     }
-//     const isBranchTag = level == 2;
-//     const createHTag = (content: string, num: number) => {
-//       return `<h${num}>${content}</h${num}>`;
-//     };
-//     let heading = createHTag(`${isBranchTag ? "@" : ""}${folderName}`, level);
-//     if (isLink) {
-//       heading = `<a href="${currentPath}">${heading}</a>`;
-//     }
-//     return heading;
-//   };
-
-//   const title = generateHeading(level, currentPath, children.length === 0);
-//   const content = Object.keys(dirTree)
-//     .map(child =>
-//       linksFromDirTree(dirTree[child], path.join(currentPath, child))
-//     )
-//     .join("\n");
-//   return `${title}<ul>${content}</ul>`;
-// };
 
 const generateFile = (filepath: string, content: string) => {
-  // const links = linksFromDirTree(dirTree, "");
   const file = `
     <!DOCTYPE html>
     <html lang="en">
@@ -89,29 +41,29 @@ const generateFile = (filepath: string, content: string) => {
 };
 
 const generateContent = (history: versionHistory, rootdir: string): string => {
-  const branches: { [key: string]: Set<string> } = {};
+  const versionNames: { [key: string]: Set<string> } = {};
   history.forEach(record => {
-    if (record.branch in branches) {
-      branches[record.branch] = branches[record.branch].add(record.commit);
+    if (record.versionName in versionNames) {
+      versionNames[record.versionName] = versionNames[record.versionName].add(record.versionTag);
     } else {
-      branches[record.branch] = new Set([record.commit]);
+      versionNames[record.versionName] = new Set([record.versionTag]);
     }
   });
 
   return `
-  ${Object.keys(branches).map(branch => {
+  ${Object.keys(versionNames).map(branch => {
     return `
     <h1>${branch}</h1>
-      ${Array.from(branches[branch])
-        .map(commit => {
+      ${Array.from(versionNames[branch])
+        .map(versionTag => {
           const filesForCommit = getFilesInDir(
-            path.join(rootdir, branch, commit)
+            path.join(rootdir, branch, versionTag)
           );
           return `
-          <a href="${branch}/${commit}"><h3>@${commit}</h3></a>
+          <a href="${branch}/${versionTag}"><h3>@${versionTag}</h3></a>
           <ul>
             ${filesForCommit.map(file => {
-              return `<li><a href="${branch}/${commit}/${file}">${file}</a></li>`;
+              return `<li><a href="${branch}/${versionTag}/${file}">${file}</a></li>`;
             })}
           </ul>`;
         })
