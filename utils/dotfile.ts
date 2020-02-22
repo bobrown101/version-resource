@@ -13,7 +13,7 @@ export const addToHistory = (
     versionName,
     versionTag
   };
-  const newHistory = Array.from(new Set([...history, newRecord]))
+  const newHistory = Array.from(new Set([newRecord, ...history]))
     .map(record => `${record.versionName},${record.versionTag}`)
     .join("\n");
   writeFileSync(path.join(outlocation, DOTFILE_NAME), newHistory);
