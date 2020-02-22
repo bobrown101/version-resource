@@ -5,7 +5,6 @@ import { versionHistory } from "./dotfile";
 const getFilesInDir = (path: string) =>
   readdirSync(path, { withFileTypes: true }).map(directory => directory.name);
 
-
 const generateFile = (filepath: string, content: string) => {
   const file = `
     <!DOCTYPE html>
@@ -44,7 +43,9 @@ const generateContent = (history: versionHistory, rootdir: string): string => {
   const versionNames: { [key: string]: Set<string> } = {};
   history.forEach(record => {
     if (record.versionName in versionNames) {
-      versionNames[record.versionName] = versionNames[record.versionName].add(record.versionTag);
+      versionNames[record.versionName] = versionNames[record.versionName].add(
+        record.versionTag
+      );
     } else {
       versionNames[record.versionName] = new Set([record.versionTag]);
     }
@@ -69,7 +70,7 @@ const generateContent = (history: versionHistory, rootdir: string): string => {
         })
         .join("\n")}
     `;
-  })}
+  }).join("\n")}
   `;
 };
 
